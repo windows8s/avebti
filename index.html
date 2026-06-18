@@ -1297,33 +1297,47 @@
     }
 
     function drawPosterSection(ctx, title, body, x, y, width) {
-      setPosterFont(ctx, "500", 30);
-      const lines = wrapPosterText(ctx, body, width - 56);
-      const height = 34 + 24 + 18 + lines.length * 31 + 34;
-      fillRoundRect(ctx, x, y, width, height, 20, "rgba(9, 18, 22, 0.86)", "rgba(49, 213, 173, 0.22)");
+      const lineHeight = 42;
+      setPosterFont(ctx, "500", 28);
+      const lines = wrapPosterText(ctx, body, width);
+      const height = 68 + lines.length * lineHeight + 30;
 
-      setPosterFont(ctx, "800", 24);
+      ctx.strokeStyle = "rgba(49, 213, 173, 0.16)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + width, y);
+      ctx.stroke();
+
+      setPosterFont(ctx, "800", 22);
       ctx.fillStyle = "#31d5ad";
       ctx.textBaseline = "top";
-      ctx.fillText(title, x + 28, y + 26);
+      ctx.fillText(title, x, y + 24);
 
-      setPosterFont(ctx, "500", 30);
-      drawPosterLines(ctx, lines, x + 28, y + 68, 31, "#d9efe7");
-      return y + height + 18;
+      setPosterFont(ctx, "500", 28);
+      drawPosterLines(ctx, lines, x, y + 68, lineHeight, "#d9efe7");
+      return y + height + 10;
     }
 
     function drawPosterTags(ctx, title, items, x, y, width) {
-      const innerX = x + 28;
-      const innerWidth = width - 56;
+      const innerX = x;
+      const innerWidth = width;
       const gap = 12;
-      const chipHeight = 44;
+      const chipHeight = 46;
       let chipX = innerX;
-      let chipY = y + 72;
+      let chipY = y + 68;
 
-      setPosterFont(ctx, "700", 24);
+      ctx.strokeStyle = "rgba(49, 213, 173, 0.16)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + width, y);
+      ctx.stroke();
+
+      setPosterFont(ctx, "700", 22);
       const rows = [];
       items.forEach(item => {
-        const chipWidth = Math.ceil(ctx.measureText(item).width) + 34;
+        const chipWidth = Math.ceil(ctx.measureText(item).width) + 32;
         if (chipX + chipWidth > innerX + innerWidth && chipX > innerX) {
           chipX = innerX;
           chipY += chipHeight + gap;
@@ -1332,31 +1346,30 @@
         chipX += chipWidth + gap;
       });
 
-      const height = (rows.length ? rows[rows.length - 1].y - y + chipHeight : 72) + 30;
-      fillRoundRect(ctx, x, y, width, height, 20, "rgba(9, 18, 22, 0.86)", "rgba(49, 213, 173, 0.22)");
+      const height = (rows.length ? rows[rows.length - 1].y - y + chipHeight : 68) + 30;
 
-      setPosterFont(ctx, "800", 24);
+      setPosterFont(ctx, "800", 22);
       ctx.fillStyle = "#31d5ad";
       ctx.textBaseline = "top";
-      ctx.fillText(title, innerX, y + 26);
+      ctx.fillText(title, innerX, y + 24);
 
-      setPosterFont(ctx, "700", 24);
+      setPosterFont(ctx, "700", 22);
       rows.forEach(row => {
-        fillRoundRect(ctx, row.x, row.y, row.width, chipHeight, 22, "rgba(49, 213, 173, 0.12)", "rgba(49, 213, 173, 0.28)");
+        fillRoundRect(ctx, row.x, row.y, row.width, chipHeight, 23, "rgba(49, 213, 173, 0.10)", "rgba(49, 213, 173, 0.20)");
         ctx.fillStyle = "#e8fff4";
-        ctx.fillText(row.item, row.x + 17, row.y + 9);
+        ctx.fillText(row.item, row.x + 16, row.y + 10);
       });
-      return y + height + 18;
+      return y + height + 10;
     }
 
     function drawPosterImage(ctx, image, x, y, width, height) {
-      fillRoundRect(ctx, x, y, width, height, 22, "#020705", "rgba(49, 213, 173, 0.24)");
+      fillRoundRect(ctx, x, y, width, height, 20, "#020705", "rgba(49, 213, 173, 0.16)");
       ctx.save();
-      roundRect(ctx, x + 8, y + 8, width - 16, height - 16, 18);
+      roundRect(ctx, x + 10, y + 10, width - 20, height - 20, 16);
       ctx.clip();
       ctx.fillStyle = "#020705";
       ctx.fillRect(x, y, width, height);
-      const ratio = Math.min((width - 16) / image.naturalWidth, (height - 16) / image.naturalHeight);
+      const ratio = Math.min((width - 20) / image.naturalWidth, (height - 20) / image.naturalHeight);
       const drawWidth = image.naturalWidth * ratio;
       const drawHeight = image.naturalHeight * ratio;
       const drawX = x + (width - drawWidth) / 2;
@@ -1386,7 +1399,7 @@
 
     function createPosterCanvas(persona, image) {
       const logicalWidth = POSTER_WIDTH;
-      const maxHeight = 3200;
+      const maxHeight = 3800;
       const tempCanvas = document.createElement("canvas");
       tempCanvas.width = logicalWidth * POSTER_SCALE;
       tempCanvas.height = maxHeight * POSTER_SCALE;
@@ -1401,81 +1414,81 @@
       ctx.fillStyle = background;
       ctx.fillRect(0, 0, logicalWidth, maxHeight);
 
-      ctx.strokeStyle = "rgba(49, 213, 173, 0.08)";
+      ctx.strokeStyle = "rgba(49, 213, 173, 0.035)";
       ctx.lineWidth = 1;
-      for (let grid = 0; grid <= logicalWidth; grid += 38) {
+      for (let grid = 0; grid <= logicalWidth; grid += 60) {
         ctx.beginPath();
         ctx.moveTo(grid, 0);
         ctx.lineTo(grid, maxHeight);
         ctx.stroke();
       }
-      for (let grid = 0; grid <= maxHeight; grid += 38) {
+      for (let grid = 0; grid <= maxHeight; grid += 60) {
         ctx.beginPath();
         ctx.moveTo(0, grid);
         ctx.lineTo(logicalWidth, grid);
         ctx.stroke();
       }
 
-      const x = 48;
+      const x = 56;
       const width = logicalWidth - x * 2;
-      let y = 46;
+      let y = 58;
 
-      setPosterFont(ctx, "900", 34);
+      setPosterFont(ctx, "900", 32);
       ctx.fillStyle = "#31d5ad";
       ctx.fillText("Ave.ai", x, y);
-      setPosterFont(ctx, "500", 22);
+      setPosterFont(ctx, "500", 21);
       ctx.fillStyle = "#b5bad0";
-      ctx.fillText("端午链上人格实验室", x + 132, y + 8);
-      y += 56;
+      ctx.fillText("端午链上人格实验室", x + 118, y + 7);
+      y += 60;
 
-      setPosterFont(ctx, "900", 50);
+      setPosterFont(ctx, "900", 48);
       ctx.fillStyle = "#f7f8ff";
       ctx.fillText("你是什么品粽？", x, y);
-      y += 64;
+      y += 68;
 
-      setPosterFont(ctx, "700", 25);
+      setPosterFont(ctx, "700", 23);
       ctx.fillStyle = "#ffd46a";
       ctx.fillText(persona.code, x, y);
-      y += 42;
+      y += 44;
 
-      drawPosterImage(ctx, image, x, y, width, 720);
-      y += 748;
+      drawPosterImage(ctx, image, x, y, width, 680);
+      y += 716;
 
-      setPosterFont(ctx, "900", 52);
+      setPosterFont(ctx, "900", 48);
       ctx.fillStyle = "#f7f8ff";
       ctx.fillText(`${persona.name} · ${persona.role}`, x, y);
-      y += 70;
+      y += 66;
 
-      setPosterFont(ctx, "700", 29);
+      setPosterFont(ctx, "700", 27);
       const taglineLines = wrapPosterText(ctx, persona.tagline, width, 3);
-      y = drawPosterLines(ctx, taglineLines, x, y, 36, "#ddf6e8") + 28;
+      y = drawPosterLines(ctx, taglineLines, x, y, 40, "#ddf6e8") + 34;
 
       y = drawPosterSection(ctx, "人格解读", persona.description, x, y, width);
       y = drawPosterTags(ctx, "本粽宜", persona.goodAt, x, y, width);
       y = drawPosterSection(ctx, "本粽忌", persona.watchOut.map(item => `· ${item}`).join("\n"), x, y, width);
       y = drawPosterSection(ctx, "最佳搭子", persona.bestMatch, x, y, width);
 
-      setPosterFont(ctx, "800", 34);
-      const quoteLines = wrapPosterText(ctx, `“${persona.quote}”`, width - 56, 3);
-      const quoteHeight = 34 + quoteLines.length * 42 + 34;
-      fillRoundRect(ctx, x, y, width, quoteHeight, 20, "rgba(49, 213, 173, 0.12)", "rgba(49, 213, 173, 0.32)");
-      drawPosterLines(ctx, quoteLines, x + 28, y + 30, 42, "#f0fff7");
-      y += quoteHeight + 24;
+      setPosterFont(ctx, "800", 32);
+      const quoteLines = wrapPosterText(ctx, `“${persona.quote}”`, width - 72, 3);
+      const quoteHeight = 40 + quoteLines.length * 48 + 40;
+      fillRoundRect(ctx, x, y, width, quoteHeight, 18, "rgba(49, 213, 173, 0.10)", "rgba(49, 213, 173, 0.20)");
+      drawPosterLines(ctx, quoteLines, x + 36, y + 36, 48, "#f0fff7");
+      y += quoteHeight + 32;
 
       setPosterFont(ctx, "700", 24);
       ctx.fillStyle = "#31d5ad";
       ctx.fillText("来测测你的链上品粽人格", x, y);
       setPosterFont(ctx, "500", 22);
       ctx.fillStyle = "#d9efe7";
-      ctx.fillText(ACTIVITY_URL, x, y + 38);
+      ctx.fillText(ACTIVITY_URL, x, y + 42);
       ctx.fillStyle = "#b5bad0";
-      ctx.fillText(`顺手用 Ave.ai 看链上机会：${AVE_URL}`, x, y + 72);
-      y += 126;
+      ctx.fillText(`顺手用 Ave.ai 看链上机会：${AVE_URL}`, x, y + 78);
+      y += 136;
 
       setPosterFont(ctx, "500", 19);
       ctx.fillStyle = "#70758f";
       ctx.fillText("本测试仅供端午活动娱乐，不构成投资建议。", x, y);
-      y += 52;
+      y += 58;
 
       const finalHeight = Math.ceil(y);
       const posterCanvas = document.createElement("canvas");
