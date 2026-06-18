@@ -265,42 +265,15 @@
       line-height: 1.7;
     }
 
-    .terminal-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 26px;
-      margin-bottom: 24px;
-      max-width: 760px;
-    }
-
-    .ticker {
-      min-height: 70px;
-      border: 1px solid rgba(93, 228, 194, 0.18);
-      border-radius: 8px;
-      padding: 12px;
-      background: rgba(9, 10, 18, 0.66);
-    }
-
-    .ticker span {
-      display: block;
-      color: var(--subtle);
-      font-size: 11px;
-      text-transform: uppercase;
-    }
-
-    .ticker strong {
-      display: block;
-      margin-top: 8px;
-      color: var(--green);
-      font-size: 16px;
-    }
-
     .button-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       align-items: center;
+    }
+
+    .hero-content > .button-row {
+      margin-top: 28px;
     }
 
     .btn {
@@ -705,9 +678,6 @@
         width: min(100%, 300px);
       }
 
-      .terminal-strip {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
     }
 
     @media (max-width: 560px) {
@@ -730,10 +700,6 @@
       .button-row,
       .btn {
         width: 100%;
-      }
-
-      .terminal-strip {
-        grid-template-columns: 1fr;
       }
 
       .question {
@@ -772,12 +738,6 @@
             <p class="hero-lede">
               8 个端午灵魂选择，测出你的链上人格。你是月球冲锋的肉粽，还是冷静观察的冰粽。
             </p>
-            <div class="terminal-strip" aria-label="测试机制">
-              <div class="ticker"><span>Questions</span><strong>8 题</strong></div>
-              <div class="ticker"><span>Types</span><strong>4 种人格</strong></div>
-              <div class="ticker"><span>Result</span><strong>人格卡片</strong></div>
-              <div class="ticker"><span>Share</span><strong>Ave 推荐</strong></div>
-            </div>
             <div class="button-row">
               <button class="btn primary" type="button" id="startBtn">开始测粽</button>
               <a class="btn secondary" href="https://ave.ai/" target="_blank" rel="noopener noreferrer">去 Ave.ai</a>
