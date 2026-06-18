@@ -568,37 +568,15 @@
     }
 
     .result-name h2 {
-      font-size: clamp(30px, 5vw, 46px);
-      line-height: 1.05;
+      font-size: clamp(20px, 6vw, 34px);
+      line-height: 1.12;
       letter-spacing: 0;
+      white-space: nowrap;
     }
 
     .result-name p {
       color: #c7d8cf;
       line-height: 1.65;
-    }
-
-    .score-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .score-item {
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 9px;
-      background: rgba(0, 0, 0, 0.22);
-      color: var(--muted);
-      font-size: 12px;
-      min-width: 0;
-    }
-
-    .score-item strong {
-      display: block;
-      color: var(--text);
-      font-size: 18px;
-      margin-top: 3px;
     }
 
     .result-copy {
@@ -754,8 +732,7 @@
         width: 100%;
       }
 
-      .terminal-strip,
-      .score-grid {
+      .terminal-strip {
         grid-template-columns: 1fr;
       }
 
@@ -854,7 +831,6 @@
                 <h2 id="resultTitle">你的品粽人格</h2>
                 <p id="resultTagline"></p>
               </div>
-              <div class="score-grid" id="scoreGrid"></div>
             </article>
 
             <div class="result-copy">
@@ -1043,7 +1019,7 @@
 
     const AVE_URL = "https://ave.ai/";
     const AVE_HANDLE = "@aveai_info";
-    const ACTIVITY_URL = window.location.href.split("#")[0];
+    const ACTIVITY_URL = "https://windows8s.github.io/avebti/";
 
     const state = {
       answers: {},
@@ -1192,13 +1168,6 @@
       };
       image.src = `${persona.image}?v=${Date.now()}`;
 
-      document.querySelector("#scoreGrid").innerHTML = AXES.map(axis => `
-        <div class="score-item">
-          ${axis.label}
-          <strong>${state.scores[axis.id] || 0}</strong>
-        </div>
-      `).join("");
-
       document.querySelector("#goodAt").innerHTML = persona.goodAt
         .map(item => `<span class="pill">${item}</span>`)
         .join("");
@@ -1219,6 +1188,18 @@
         `来测测你是什么品粽：${ACTIVITY_URL}`,
         `顺手用 Ave.ai 看链上机会：${AVE_URL}`,
         "",
+        `关注 ${AVE_HANDLE}，晒出你的粽型人格参与端午抽奖。`,
+        "#端午节 #AveAI #Web3"
+      ].join("\n");
+    }
+
+    function buildTweetText() {
+      const persona = PERSONAS[state.resultId];
+      return [
+        `我测出来是「${persona.name} · ${persona.role}」。`,
+        persona.shareLine,
+        "",
+        "来测测你是什么品粽。顺手用 Ave.ai 看链上机会。",
         `关注 ${AVE_HANDLE}，晒出你的粽型人格参与端午抽奖。`,
         "#端午节 #AveAI #Web3"
       ].join("\n");
@@ -1255,23 +1236,11 @@
     }
 
     async function shareResult() {
-      const text = buildShareText();
-      const persona = PERSONAS[state.resultId];
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: `你是什么品粽？${persona.name} · ${persona.role}`,
-            text,
-            url: ACTIVITY_URL
-          });
-          return;
-        } catch (error) {
-          if (error.name === "AbortError") return;
-        }
-      }
-
-      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      const tweetParams = new URLSearchParams({
+        text: buildTweetText(),
+        url: ACTIVITY_URL
+      });
+      const tweetUrl = `https://twitter.com/intent/tweet?${tweetParams.toString()}`;
       const opened = window.open(tweetUrl, "_blank", "noopener,noreferrer");
       if (!opened) {
         await copyShareText();
