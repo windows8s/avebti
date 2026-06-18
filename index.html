@@ -994,6 +994,8 @@
     const AVE_URL = "https://ave.ai/";
     const AVE_HANDLE = "@aveai_info";
     const ACTIVITY_URL = "https://windows8s.github.io/avebti/";
+    const POSTER_WIDTH = 750;
+    const POSTER_SCALE = 2;
 
     const state = {
       answers: {},
@@ -1225,8 +1227,311 @@
       }
     }
 
-    function saveResultHint() {
-      showToast("当前版本使用截图保存。图片放入 image 后，结果卡会自动展示人格图。");
+    function setPosterFont(ctx, weight, size) {
+      ctx.font = `${weight} ${size}px Inter, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif`;
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + width, y, x + width, y + height, r);
+      ctx.arcTo(x + width, y + height, x, y + height, r);
+      ctx.arcTo(x, y + height, x, y, r);
+      ctx.arcTo(x, y, x + width, y, r);
+      ctx.closePath();
+    }
+
+    function fillRoundRect(ctx, x, y, width, height, radius, fillStyle, strokeStyle) {
+      roundRect(ctx, x, y, width, height, radius);
+      ctx.fillStyle = fillStyle;
+      ctx.fill();
+      if (strokeStyle) {
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+
+    function wrapPosterText(ctx, text, maxWidth, maxLines = Infinity) {
+      const paragraphs = String(text).split("\n");
+      const lines = [];
+      for (const paragraph of paragraphs) {
+        if (!paragraph) {
+          lines.push("");
+          continue;
+        }
+        let line = "";
+        for (const char of Array.from(paragraph)) {
+          const next = line + char;
+          if (line && ctx.measureText(next).width > maxWidth) {
+            lines.push(line);
+            line = char;
+            if (lines.length >= maxLines) break;
+          } else {
+            line = next;
+          }
+        }
+        if (lines.length >= maxLines) break;
+        if (line) lines.push(line);
+      }
+
+      if (lines.length > maxLines) lines.length = maxLines;
+      if (lines.length === maxLines && maxLines !== Infinity) {
+        const lastIndex = lines.length - 1;
+        while (lines[lastIndex] && ctx.measureText(`${lines[lastIndex]}...`).width > maxWidth) {
+          lines[lastIndex] = lines[lastIndex].slice(0, -1);
+        }
+        lines[lastIndex] = `${lines[lastIndex]}...`;
+      }
+      return lines;
+    }
+
+    function drawPosterLines(ctx, lines, x, y, lineHeight, color) {
+      ctx.fillStyle = color;
+      ctx.textBaseline = "top";
+      lines.forEach((line, index) => {
+        ctx.fillText(line, x, y + index * lineHeight);
+      });
+      return y + lines.length * lineHeight;
+    }
+
+    function drawPosterSection(ctx, title, body, x, y, width) {
+      setPosterFont(ctx, "500", 30);
+      const lines = wrapPosterText(ctx, body, width - 56);
+      const height = 34 + 24 + 18 + lines.length * 31 + 34;
+      fillRoundRect(ctx, x, y, width, height, 20, "rgba(9, 18, 22, 0.86)", "rgba(49, 213, 173, 0.22)");
+
+      setPosterFont(ctx, "800", 24);
+      ctx.fillStyle = "#31d5ad";
+      ctx.textBaseline = "top";
+      ctx.fillText(title, x + 28, y + 26);
+
+      setPosterFont(ctx, "500", 30);
+      drawPosterLines(ctx, lines, x + 28, y + 68, 31, "#d9efe7");
+      return y + height + 18;
+    }
+
+    function drawPosterTags(ctx, title, items, x, y, width) {
+      const innerX = x + 28;
+      const innerWidth = width - 56;
+      const gap = 12;
+      const chipHeight = 44;
+      let chipX = innerX;
+      let chipY = y + 72;
+
+      setPosterFont(ctx, "700", 24);
+      const rows = [];
+      items.forEach(item => {
+        const chipWidth = Math.ceil(ctx.measureText(item).width) + 34;
+        if (chipX + chipWidth > innerX + innerWidth && chipX > innerX) {
+          chipX = innerX;
+          chipY += chipHeight + gap;
+        }
+        rows.push({ item, x: chipX, y: chipY, width: chipWidth });
+        chipX += chipWidth + gap;
+      });
+
+      const height = (rows.length ? rows[rows.length - 1].y - y + chipHeight : 72) + 30;
+      fillRoundRect(ctx, x, y, width, height, 20, "rgba(9, 18, 22, 0.86)", "rgba(49, 213, 173, 0.22)");
+
+      setPosterFont(ctx, "800", 24);
+      ctx.fillStyle = "#31d5ad";
+      ctx.textBaseline = "top";
+      ctx.fillText(title, innerX, y + 26);
+
+      setPosterFont(ctx, "700", 24);
+      rows.forEach(row => {
+        fillRoundRect(ctx, row.x, row.y, row.width, chipHeight, 22, "rgba(49, 213, 173, 0.12)", "rgba(49, 213, 173, 0.28)");
+        ctx.fillStyle = "#e8fff4";
+        ctx.fillText(row.item, row.x + 17, row.y + 9);
+      });
+      return y + height + 18;
+    }
+
+    function drawPosterImage(ctx, image, x, y, width, height) {
+      fillRoundRect(ctx, x, y, width, height, 22, "#020705", "rgba(49, 213, 173, 0.24)");
+      ctx.save();
+      roundRect(ctx, x + 8, y + 8, width - 16, height - 16, 18);
+      ctx.clip();
+      ctx.fillStyle = "#020705";
+      ctx.fillRect(x, y, width, height);
+      const ratio = Math.min((width - 16) / image.naturalWidth, (height - 16) / image.naturalHeight);
+      const drawWidth = image.naturalWidth * ratio;
+      const drawHeight = image.naturalHeight * ratio;
+      const drawX = x + (width - drawWidth) / 2;
+      const drawY = y + (height - drawHeight) / 2;
+      ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+      ctx.restore();
+    }
+
+    function loadPosterImage(src) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.decoding = "async";
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("result image failed to load"));
+        image.src = src;
+      });
+    }
+
+    function canvasToBlob(canvas) {
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => {
+          if (blob) resolve(blob);
+          else reject(new Error("poster blob generation failed"));
+        }, "image/png");
+      });
+    }
+
+    function createPosterCanvas(persona, image) {
+      const logicalWidth = POSTER_WIDTH;
+      const maxHeight = 3200;
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = logicalWidth * POSTER_SCALE;
+      tempCanvas.height = maxHeight * POSTER_SCALE;
+      const ctx = tempCanvas.getContext("2d");
+      ctx.scale(POSTER_SCALE, POSTER_SCALE);
+      ctx.textBaseline = "top";
+
+      const background = ctx.createLinearGradient(0, 0, 0, maxHeight);
+      background.addColorStop(0, "#090b14");
+      background.addColorStop(0.5, "#061411");
+      background.addColorStop(1, "#050509");
+      ctx.fillStyle = background;
+      ctx.fillRect(0, 0, logicalWidth, maxHeight);
+
+      ctx.strokeStyle = "rgba(49, 213, 173, 0.08)";
+      ctx.lineWidth = 1;
+      for (let grid = 0; grid <= logicalWidth; grid += 38) {
+        ctx.beginPath();
+        ctx.moveTo(grid, 0);
+        ctx.lineTo(grid, maxHeight);
+        ctx.stroke();
+      }
+      for (let grid = 0; grid <= maxHeight; grid += 38) {
+        ctx.beginPath();
+        ctx.moveTo(0, grid);
+        ctx.lineTo(logicalWidth, grid);
+        ctx.stroke();
+      }
+
+      const x = 48;
+      const width = logicalWidth - x * 2;
+      let y = 46;
+
+      setPosterFont(ctx, "900", 34);
+      ctx.fillStyle = "#31d5ad";
+      ctx.fillText("Ave.ai", x, y);
+      setPosterFont(ctx, "500", 22);
+      ctx.fillStyle = "#b5bad0";
+      ctx.fillText("端午链上人格实验室", x + 132, y + 8);
+      y += 56;
+
+      setPosterFont(ctx, "900", 50);
+      ctx.fillStyle = "#f7f8ff";
+      ctx.fillText("你是什么品粽？", x, y);
+      y += 64;
+
+      setPosterFont(ctx, "700", 25);
+      ctx.fillStyle = "#ffd46a";
+      ctx.fillText(persona.code, x, y);
+      y += 42;
+
+      drawPosterImage(ctx, image, x, y, width, 720);
+      y += 748;
+
+      setPosterFont(ctx, "900", 52);
+      ctx.fillStyle = "#f7f8ff";
+      ctx.fillText(`${persona.name} · ${persona.role}`, x, y);
+      y += 70;
+
+      setPosterFont(ctx, "700", 29);
+      const taglineLines = wrapPosterText(ctx, persona.tagline, width, 3);
+      y = drawPosterLines(ctx, taglineLines, x, y, 36, "#ddf6e8") + 28;
+
+      y = drawPosterSection(ctx, "人格解读", persona.description, x, y, width);
+      y = drawPosterTags(ctx, "本粽宜", persona.goodAt, x, y, width);
+      y = drawPosterSection(ctx, "本粽忌", persona.watchOut.map(item => `· ${item}`).join("\n"), x, y, width);
+      y = drawPosterSection(ctx, "最佳搭子", persona.bestMatch, x, y, width);
+
+      setPosterFont(ctx, "800", 34);
+      const quoteLines = wrapPosterText(ctx, `“${persona.quote}”`, width - 56, 3);
+      const quoteHeight = 34 + quoteLines.length * 42 + 34;
+      fillRoundRect(ctx, x, y, width, quoteHeight, 20, "rgba(49, 213, 173, 0.12)", "rgba(49, 213, 173, 0.32)");
+      drawPosterLines(ctx, quoteLines, x + 28, y + 30, 42, "#f0fff7");
+      y += quoteHeight + 24;
+
+      setPosterFont(ctx, "700", 24);
+      ctx.fillStyle = "#31d5ad";
+      ctx.fillText("来测测你的链上品粽人格", x, y);
+      setPosterFont(ctx, "500", 22);
+      ctx.fillStyle = "#d9efe7";
+      ctx.fillText(ACTIVITY_URL, x, y + 38);
+      ctx.fillStyle = "#b5bad0";
+      ctx.fillText(`顺手用 Ave.ai 看链上机会：${AVE_URL}`, x, y + 72);
+      y += 126;
+
+      setPosterFont(ctx, "500", 19);
+      ctx.fillStyle = "#70758f";
+      ctx.fillText("本测试仅供端午活动娱乐，不构成投资建议。", x, y);
+      y += 52;
+
+      const finalHeight = Math.ceil(y);
+      const posterCanvas = document.createElement("canvas");
+      posterCanvas.width = logicalWidth * POSTER_SCALE;
+      posterCanvas.height = finalHeight * POSTER_SCALE;
+      posterCanvas.getContext("2d").drawImage(
+        tempCanvas,
+        0,
+        0,
+        posterCanvas.width,
+        posterCanvas.height,
+        0,
+        0,
+        posterCanvas.width,
+        posterCanvas.height
+      );
+      return posterCanvas;
+    }
+
+    function downloadPosterBlob(blob, persona) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `AveAI-${persona.name}-结果长图.png`.replace(/[\\/:*?"<>|]/g, "-");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    async function saveResultImage() {
+      if (!state.resultId) {
+        showToast("请先完成测试并生成结果。");
+        return;
+      }
+
+      const button = document.querySelector("#saveBtn");
+      const originalText = button.textContent;
+      const persona = PERSONAS[state.resultId];
+      button.disabled = true;
+      button.textContent = "生成中...";
+      showToast("正在生成结果长图。");
+
+      try {
+        const image = await loadPosterImage(getPersonaImagePath(persona));
+        const canvas = createPosterCanvas(persona, image);
+        const blob = await canvasToBlob(canvas);
+        downloadPosterBlob(blob, persona);
+        showToast("结果长图已保存。");
+      } catch (error) {
+        console.error(error);
+        showToast("长图生成失败，请确认人格图已加载后重试。");
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
     }
 
     function showToast(message) {
@@ -1243,7 +1548,7 @@
     document.querySelector("#submitBtn").addEventListener("click", submitQuiz);
     document.querySelector("#shareBtn").addEventListener("click", shareResult);
     document.querySelector("#copyBtn").addEventListener("click", copyShareText);
-    document.querySelector("#saveBtn").addEventListener("click", saveResultHint);
+    document.querySelector("#saveBtn").addEventListener("click", saveResultImage);
     document.querySelector("#restartBtn").addEventListener("click", () => {
       resetQuiz();
       showScreen("quiz");
