@@ -11,12 +11,12 @@
 
 ## 文件名约定
 
-- 至尊肉粽：`assets/zong/rou.png`
-- 咸蛋黄粽：`assets/zong/egg.png`
-- 甜粽：`assets/zong/sweet.png`
-- 冰粽：`assets/zong/ice.png`
+- 至尊肉粽：`image/至尊肉粽.jpg`
+- 咸蛋黄粽：`image/咸蛋黄粽.jpg`
+- 甜粽：`image/甜粽.jpg`
+- 冰粽：`image/冰粽.jpg`
 
-页面开发时先按以上路径预留。图片未放入前使用占位卡；后续把生成图放到对应路径即可。
+页面会根据人格名称自动匹配以上同名图片。图片未放入前使用占位卡；后续把生成图放到对应路径即可。
 
 ## 至尊肉粽 · 月球冲锋官
 

@@ -487,18 +487,19 @@
       border-radius: 8px;
       overflow: hidden;
       background:
-        radial-gradient(circle at 50% 35%, rgba(123, 92, 255, 0.24), transparent 34%),
-        linear-gradient(145deg, rgba(15, 16, 27, 0.95), rgba(5, 5, 9, 0.95));
+        linear-gradient(145deg, rgba(9, 22, 14, 0.96), rgba(2, 7, 5, 0.98));
       position: relative;
       display: grid;
       place-items: center;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
     }
 
     .result-visual img {
       width: 100%;
       height: 100%;
       display: none;
-      object-fit: cover;
+      object-fit: contain;
+      background: #020705;
     }
 
     .visual-placeholder {
@@ -782,7 +783,7 @@
                 <div class="visual-placeholder" id="visualPlaceholder">
                   <div>
                     <strong id="placeholderTitle">人格图占位</strong>
-                    <span>把生成图放入对应 assets/zong 文件后自动显示。</span>
+                    <span>把同名人格图放入 image 文件夹后自动显示。</span>
                   </div>
                 </div>
               </div>
@@ -838,6 +839,9 @@
       { id: "SWEET", label: "甜粽" },
       { id: "ICE", label: "冰粽" }
     ];
+
+    const PERSONA_IMAGE_DIR = "image";
+    const PERSONA_IMAGE_EXT = "jpg";
 
     const QUESTIONS = [
       {
@@ -920,7 +924,6 @@
         code: "ROU / Moon Charge",
         name: "至尊肉粽",
         role: "月球冲锋官",
-        image: "assets/zong/rou.png",
         tagline: "勇敢的人先享受世界。",
         description: "别人看到机会还在研究，你已经开始问 CA 发我。你的人格关键词是冲锋、开拓、速度和一点点不服输。你相信 alpha 是开拓出来的，机会不会等准备最充分的人，只会奖励敢先开枪的人。",
         goodAt: ["热门叙事", "新资产发现", "认识新朋友", "快速行动"],
@@ -933,7 +936,6 @@
         code: "EGG / Alpha Research",
         name: "咸蛋黄粽",
         role: "Alpha 鉴定师",
-        image: "assets/zong/egg.png",
         tagline: "不打无准备之仗。",
         description: "别人看 K 线涨了，你会先看背后原因、资金流、叙事周期和合约风险。你的浏览器里永远有一排标签页，越是热闹，越要冷静拆解。你不是不上车，你是要确认这辆车不是纸糊的。",
         goodAt: ["AI 赛道研究", "美股打新", "长线布局", "写长文分析"],
@@ -946,7 +948,6 @@
         code: "SWEET / Life Mode",
         name: "甜粽",
         role: "人间体验家",
-        image: "assets/zong/sweet.png",
         tagline: "人生不能只有 K 线，赚钱很好，快乐更重要。",
         description: "别人盯盘 8 小时，你看 8 分钟就去生活。你知道市场一直在，但朋友、旅行、恋爱和好天气不一定每天都有。你适合低频、轻盈、不过度消耗自己的节奏。",
         goodAt: ["旅游", "恋爱", "聚会", "低频投资"],
@@ -959,7 +960,6 @@
         code: "ICE / Long View",
         name: "冰粽",
         role: "长期观察者",
-        image: "assets/zong/ice.png",
         tagline: "别人贪婪时我恐惧，别人恐惧时我贪婪。",
         description: "你不是没有情绪，只是不会把情绪交给市场。你会看信号、等确认、做配置，也能在嘈杂行情里保持沉默。你相信真正的机会不怕晚一点确认，风险控制永远先于爽感。",
         goodAt: ["定投", "长线持有", "资产配置", "等机会出现"],
@@ -1126,7 +1126,7 @@
         image.style.display = "none";
         placeholder.style.display = "grid";
       };
-      image.src = `${persona.image}?v=${Date.now()}`;
+      image.src = `${getPersonaImagePath(persona)}?v=${Date.now()}`;
 
       document.querySelector("#goodAt").innerHTML = persona.goodAt
         .map(item => `<span class="pill">${item}</span>`)
@@ -1137,6 +1137,10 @@
         .join("");
 
       document.querySelector("#sharePreview").textContent = buildShareText();
+    }
+
+    function getPersonaImagePath(persona) {
+      return `${PERSONA_IMAGE_DIR}/${encodeURIComponent(persona.name)}.${PERSONA_IMAGE_EXT}`;
     }
 
     function buildShareText() {
@@ -1208,7 +1212,7 @@
     }
 
     function saveResultHint() {
-      showToast("当前版本使用截图保存。图片放入 assets/zong 后，结果卡会自动展示人格图。");
+      showToast("当前版本使用截图保存。图片放入 image 后，结果卡会自动展示人格图。");
     }
 
     function showToast(message) {
