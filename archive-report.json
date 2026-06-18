@@ -1,0 +1,289 @@
+{
+  "generatedAt": "2026-06-17T08:36:01.848Z",
+  "site": "https://sbti.unun.dev/",
+  "downloads": [
+    {
+      "url": "https://sbti.unun.dev/",
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 70143,
+      "sha256": "c9b077b1108134e9966dc0e3f4a05b06d31c07e058879509b6c6f68999dfa01e",
+      "path": "index.original.html"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/IMSB.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 269351,
+      "sha256": "c76f1b460cd4ea5dc5ff802d84619b6e2d22bdcfccdeb25ad977b476dd30d434",
+      "path": "image/IMSB.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/BOSS.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 167151,
+      "sha256": "15835541156378cc99aac0e53dfb9300fd663db52c37bfbfcaa9f18cb228b355",
+      "path": "image/BOSS.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/MUM.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 136647,
+      "sha256": "4781faa501be7c6c8448622d98e44bc940c3ee1ea51c9b7f9f4bcf4a48558607",
+      "path": "image/MUM.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/FAKE.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 172477,
+      "sha256": "11e1bb8e81625e60b9cba219d1f9fe61bc5bd98516b40a5b8c371ccae779f2ea",
+      "path": "image/FAKE.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/Dior-s.jpg",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/jpeg",
+      "bytes": 54221,
+      "sha256": "01ad9e4561add759852e4e2f1aeee4360c1f9c53fc39fc96ed66d2ed81eb8547",
+      "path": "image/Dior-s.jpg"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/DEAD.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 241648,
+      "sha256": "36a01e7dc94556a9725f436c77ee5d52ed34be494963efc0154875d0a7d90a6a",
+      "path": "image/DEAD.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/ZZZZ.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 252388,
+      "sha256": "566fc774c38e3a8c4ec52f243ef400fefda753184fd93bfb99bf9d5d60ca5271",
+      "path": "image/ZZZZ.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/GOGO.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 163936,
+      "sha256": "4b74a1db85e503e11009e5a6b3670afffe71b698a1a059858ed9c6f34744e333",
+      "path": "image/GOGO.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/FUCK.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 247246,
+      "sha256": "e325278c37ce7599af94ed2ac3da934654ac65a0906a4ba8c27e3076e5221e34",
+      "path": "image/FUCK.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/CTRL.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 131414,
+      "sha256": "761aeb9803c466ffa4786fbb123d7af58e5b3c9d4eeff2d5172178bd2976e488",
+      "path": "image/CTRL.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/HHHH.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 206282,
+      "sha256": "3f9b8ca33302a6d5710e8725dbc5db2a4e71fff82830147a3d710a3bc5e693b7",
+      "path": "image/HHHH.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/SEXY.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 165839,
+      "sha256": "43f7da99802985e13c6c2130f4808d60c1ee1575a4d0a6c7026b0c1298b35e4e",
+      "path": "image/SEXY.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/OJBK.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 133654,
+      "sha256": "c4bd40603e63f9abbc82f9b64be9f93a9bf4e7e45ca2e04097e54a7108706728",
+      "path": "image/OJBK.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/JOKE-R.jpg",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/jpeg",
+      "bytes": 40206,
+      "sha256": "71cd777402a175262ec066bac91b3bed822278bd9f5f2dfcafc36249d38bff78",
+      "path": "image/JOKE-R.jpg"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/POOR.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 189755,
+      "sha256": "b491d139ab6ee97009e0536b7abd80089c3131d7ac8dbd9d5e3f59bfe81de043",
+      "path": "image/POOR.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/OH-NO.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 207308,
+      "sha256": "4cfa50279423f07908aff7b49c25a5a4445a585d0f9351dbdd6d8741afd64b79",
+      "path": "image/OH-NO.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/MONK.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 188431,
+      "sha256": "322a4be5f3b8c83ca82e996481570fa509ee819c46810bc18b2425279780ad1e",
+      "path": "image/MONK.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/SHIT.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 186441,
+      "sha256": "1853e7edd9c436f354e30e426c77fa1a6044e48227287fce45516944fa6b9fba",
+      "path": "image/SHIT.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/THAN-K.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 145963,
+      "sha256": "306a033d0ce6344c5bdbceb388d284f7786db8c43f06ad8557e2e341715ee2f2",
+      "path": "image/THAN-K.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/MALO.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 138043,
+      "sha256": "1af0f71c77853d8c9d1121581218f62423d635b52980e5f14dbc93592edb5f9a",
+      "path": "image/MALO.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/ATM-er.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 157119,
+      "sha256": "8838ddd4db8408b7d0c2d16b98d00a7e7634f238050812343c7ba88c34c3ffd3",
+      "path": "image/ATM-er.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/THIN-K.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 233374,
+      "sha256": "4d0614454d4566ea1a3b446c6705441aad3e12a406d2de4d3ffc76f35c7a920c",
+      "path": "image/THIN-K.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/SOLO.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 140640,
+      "sha256": "6e89bd226e9292777bdd1e44bdf33bb07278fb5b7bc14dfe4567790e9b58683b",
+      "path": "image/SOLO.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/LOVE-R.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 195531,
+      "sha256": "a576c51c7f8162ba028bd92ebeb08fdd832ad4346c3b0f41eaddb36b61843f81",
+      "path": "image/LOVE-R.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/WOC.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 191351,
+      "sha256": "26fc7ef737e1353673188f827b3ff18f693603ad05ed920516aa710f4b85b918",
+      "path": "image/WOC.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/DRUNK.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 221369,
+      "sha256": "52c9fd903d4cefdb3bbf539092928ae02ba653d18a4c8b941448a69eb1afb2a2",
+      "path": "image/DRUNK.png"
+    },
+    {
+      "url": "https://sbti.unun.dev/image/IMFW.png",
+      "status": 200,
+      "ok": true,
+      "contentType": "image/png",
+      "bytes": 153028,
+      "sha256": "2079f1d17ec519fe0dee62c059f8c01a9cbb0d20617a7360b548564c6597a156",
+      "path": "image/IMFW.png"
+    },
+    {
+      "url": "https://static.cloudflareinsights.com/beacon.min.js",
+      "ok": false,
+      "error": "TypeError: fetch failed"
+    },
+    {
+      "url": "https://sbti.unun.dev/robots.txt",
+      "status": 200,
+      "ok": true,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 71881,
+      "sha256": "a993bd4c710163987111a4267081f587bbad236847ea2199eb62226d76183661",
+      "path": "robots.txt"
+    },
+    {
+      "url": "https://sbti.unun.dev/sitemap.xml",
+      "status": 200,
+      "ok": true,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 70143,
+      "sha256": "c9b077b1108134e9966dc0e3f4a05b06d31c07e058879509b6c6f68999dfa01e",
+      "path": "sitemap.xml"
+    }
+  ],
+  "anchors": [
+    "https://www.bilibili.com/video/BV1LpDHByET6/",
+    "https://www.bilibili.com/blackboard/era/WijKT2bWuCJWPg8B.html",
+    "https://github.com/UnluckyNinja/SBTI-test"
+  ],
+  "notes": [
+    "Only publicly referenced assets were downloaded. No authentication, bypass, brute-force route enumeration, or private API collection was performed."
+  ]
+}

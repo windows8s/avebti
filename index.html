@@ -1,0 +1,1309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050509">
+  <title>你是什么品粽？Ave.ai 端午人格测试</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050509;
+      --panel: rgba(15, 16, 27, 0.82);
+      --panel-solid: #10111d;
+      --line: rgba(93, 228, 194, 0.22);
+      --line-strong: rgba(120, 105, 255, 0.52);
+      --text: #f7f8ff;
+      --muted: #b5bad0;
+      --subtle: #70758f;
+      --green: #31d5ad;
+      --green-strong: #21c59a;
+      --cyan: #4b8cff;
+      --purple: #7b5cff;
+      --gold: #ffd46a;
+      --red: #ff6a55;
+      --sweet: #ff8fbe;
+      --ice: #94d9ff;
+      --radius: 8px;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 6%, rgba(49, 213, 173, 0.3), transparent 30%),
+        radial-gradient(circle at 78% 10%, rgba(123, 92, 255, 0.28), transparent 32%),
+        radial-gradient(circle at 50% 88%, rgba(75, 140, 255, 0.16), transparent 36%),
+        linear-gradient(145deg, #050509 0%, #0d0e18 48%, #06070d 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      content: "";
+      background:
+        linear-gradient(135deg, transparent 0 18%, rgba(49, 213, 173, 0.08) 18% 19%, transparent 19% 100%),
+        linear-gradient(40deg, transparent 0 74%, rgba(123, 92, 255, 0.08) 74% 75%, transparent 75% 100%);
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 0 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: block;
+      object-fit: contain;
+      box-shadow: 0 0 34px rgba(49, 213, 173, 0.2);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+      line-height: 1.1;
+    }
+
+    .brand-copy strong {
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .top-actions a {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 12px;
+      background: rgba(15, 16, 27, 0.72);
+    }
+
+    .shell {
+      display: block;
+    }
+
+    .screen {
+      display: none;
+      min-height: 640px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .hero,
+    .quiz-panel,
+    .result-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(17, 18, 31, 0.92), rgba(8, 9, 16, 0.88));
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      min-height: 640px;
+      padding: clamp(26px, 5vw, 58px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
+      align-items: center;
+      gap: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(130deg, rgba(49, 213, 173, 0.14), transparent 36%),
+        linear-gradient(315deg, rgba(123, 92, 255, 0.16), transparent 42%);
+      pointer-events: none;
+    }
+
+    .hero-content,
+    .hero-logo-panel {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-logo-panel {
+      justify-self: center;
+      width: min(100%, 340px);
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .hero-logo-card {
+      width: min(100%, 300px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: #000;
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.36), 0 0 58px rgba(123, 92, 255, 0.22);
+    }
+
+    .hero-logo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .hero-logo-panel p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 300px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--green);
+      background: rgba(49, 213, 173, 0.08);
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .eyebrow::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 99px;
+      content: "";
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin-top: 26px;
+      font-size: clamp(42px, 7vw, 92px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .hero-lede {
+      max-width: 720px;
+      margin-top: 22px;
+      color: #c7d8cf;
+      font-size: clamp(16px, 2vw, 22px);
+      line-height: 1.7;
+    }
+
+    .terminal-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 26px;
+      margin-bottom: 24px;
+      max-width: 760px;
+    }
+
+    .ticker {
+      min-height: 70px;
+      border: 1px solid rgba(93, 228, 194, 0.18);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(9, 10, 18, 0.66);
+    }
+
+    .ticker span {
+      display: block;
+      color: var(--subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .ticker strong {
+      display: block;
+      margin-top: 8px;
+      color: var(--green);
+      font-size: 16px;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      min-height: 46px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      border-color: var(--line-strong);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .btn.primary {
+      color: #050509;
+      background: linear-gradient(135deg, #46e0bb, #6b88ff 52%, #8b65ff);
+      font-weight: 800;
+      box-shadow: 0 12px 34px rgba(123, 92, 255, 0.24);
+    }
+
+    .btn.secondary {
+      border-color: var(--line);
+      background: rgba(13, 14, 24, 0.82);
+    }
+
+    .btn.danger {
+      border-color: rgba(255, 106, 85, 0.38);
+      color: #ffd3cd;
+    }
+
+    .quiz-panel,
+    .result-panel {
+      min-height: 640px;
+      padding: clamp(20px, 4vw, 38px);
+    }
+
+    .quiz-head {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .step-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+      transition: width 0.2s ease;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question {
+      border: 1px solid rgba(118, 255, 176, 0.16);
+      border-radius: 8px;
+      padding: 18px;
+      background: rgba(2, 7, 5, 0.48);
+    }
+
+    .question h3 {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.45;
+      letter-spacing: 0;
+    }
+
+    .question h3 span {
+      color: var(--green);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .option {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 8px;
+      padding: 14px 14px;
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 10px;
+      align-items: start;
+      color: #dcece3;
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+    }
+
+    .option:hover,
+    .option:focus-visible {
+      border-color: var(--line-strong);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .option.selected {
+      border-color: var(--green);
+      background: rgba(84, 246, 138, 0.12);
+      color: var(--text);
+    }
+
+    .option-key {
+      width: 26px;
+      height: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.26);
+    }
+
+    .submit-row {
+      margin-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .status-text {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .result-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .result-card {
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 20px;
+      background:
+        linear-gradient(180deg, rgba(84, 246, 138, 0.12), rgba(2, 7, 5, 0.72)),
+        rgba(2, 7, 5, 0.82);
+      display: grid;
+      gap: 16px;
+      min-height: 540px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 26px 26px;
+      pointer-events: none;
+    }
+
+    .result-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-visual {
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      border: 1px solid rgba(118, 255, 176, 0.18);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(123, 92, 255, 0.24), transparent 34%),
+        linear-gradient(145deg, rgba(15, 16, 27, 0.95), rgba(5, 5, 9, 0.95));
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .result-visual img {
+      width: 100%;
+      height: 100%;
+      display: none;
+      object-fit: cover;
+    }
+
+    .visual-placeholder {
+      width: 72%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(118, 255, 176, 0.32);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: var(--green);
+      text-align: center;
+      background: rgba(0, 0, 0, 0.22);
+      box-shadow: inset 0 0 28px rgba(123, 92, 255, 0.12);
+    }
+
+    .visual-placeholder strong {
+      font-size: clamp(18px, 3vw, 28px);
+      line-height: 1.2;
+    }
+
+    .visual-placeholder span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .result-name {
+      display: grid;
+      gap: 8px;
+    }
+
+    .result-name .code {
+      color: var(--green);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .result-name h2 {
+      font-size: clamp(30px, 5vw, 46px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .result-name p {
+      color: #c7d8cf;
+      line-height: 1.65;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .score-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 9px;
+      background: rgba(0, 0, 0, 0.22);
+      color: var(--muted);
+      font-size: 12px;
+      min-width: 0;
+    }
+
+    .score-item strong {
+      display: block;
+      color: var(--text);
+      font-size: 18px;
+      margin-top: 3px;
+    }
+
+    .result-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .quote {
+      border-left: 3px solid var(--green);
+      padding-left: 14px;
+      color: #ddf6e8;
+      font-size: clamp(18px, 2.4vw, 24px);
+      line-height: 1.45;
+    }
+
+    .copy-section {
+      border: 1px solid rgba(118, 255, 176, 0.16);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(2, 7, 5, 0.42);
+    }
+
+    .copy-section h3 {
+      color: var(--green);
+      font-size: 13px;
+      margin-bottom: 10px;
+      letter-spacing: 0;
+    }
+
+    .copy-section p,
+    .copy-section li {
+      color: #c7d8cf;
+      line-height: 1.72;
+      font-size: 15px;
+    }
+
+    .copy-section ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      border: 1px solid rgba(118, 255, 176, 0.2);
+      border-radius: 999px;
+      padding: 7px 10px;
+      color: #dcece3;
+      background: rgba(84, 246, 138, 0.08);
+      font-size: 12px;
+    }
+
+    .share-box {
+      border: 1px solid rgba(118, 255, 176, 0.22);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(84, 246, 138, 0.08);
+      color: #d7f5e2;
+      line-height: 1.7;
+      white-space: pre-line;
+      font-size: 14px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 20;
+      max-width: min(420px, calc(100% - 32px));
+      transform: translateX(-50%) translateY(18px);
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: rgba(5, 12, 9, 0.96);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .footnote {
+      color: var(--subtle);
+      font-size: 12px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    @media (max-width: 920px) {
+      .app {
+        width: min(100% - 24px, 720px);
+        padding-top: 14px;
+      }
+
+      .result-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .screen,
+      .hero,
+      .quiz-panel,
+      .result-panel {
+        min-height: auto;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: calc(100vh - 120px);
+      }
+
+      .hero-logo-panel {
+        justify-self: start;
+        width: min(100%, 300px);
+      }
+
+      .terminal-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .top-actions {
+        display: none;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .submit-row {
+        align-items: stretch;
+      }
+
+      .button-row,
+      .btn {
+        width: 100%;
+      }
+
+      .terminal-strip,
+      .score-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .question {
+        padding: 14px;
+      }
+
+      .option {
+        grid-template-columns: 24px 1fr;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar" aria-label="Ave.ai 活动顶部栏">
+      <a class="brand" href="https://ave.ai/" target="_blank" rel="noopener noreferrer" aria-label="打开 Ave.ai">
+        <img class="brand-logo" src="assets/ave-logo.png" alt="Ave.ai logo">
+        <span class="brand-copy">
+          <strong>Ave.ai</strong>
+          <span>端午链上人格实验室</span>
+        </span>
+      </a>
+      <nav class="top-actions" aria-label="外部链接">
+        <a href="https://ave.ai/" target="_blank" rel="noopener noreferrer">Ave.ai</a>
+        <a href="https://twitter.com/aveai_info" target="_blank" rel="noopener noreferrer">@aveai_info</a>
+      </nav>
+    </header>
+
+    <main class="shell">
+      <section id="screen-home" class="screen active" aria-labelledby="home-title">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="eyebrow">Dragon Boat Festival On-chain Quiz</div>
+            <h1 id="home-title">你是什么品粽？</h1>
+            <p class="hero-lede">
+              8 个端午灵魂选择，测出你的链上人格。你是月球冲锋的肉粽，还是冷静观察的冰粽。
+            </p>
+            <div class="terminal-strip" aria-label="测试机制">
+              <div class="ticker"><span>Questions</span><strong>8 题</strong></div>
+              <div class="ticker"><span>Types</span><strong>4 种人格</strong></div>
+              <div class="ticker"><span>Result</span><strong>人格卡片</strong></div>
+              <div class="ticker"><span>Share</span><strong>Ave 推荐</strong></div>
+            </div>
+            <div class="button-row">
+              <button class="btn primary" type="button" id="startBtn">开始测粽</button>
+              <a class="btn secondary" href="https://ave.ai/" target="_blank" rel="noopener noreferrer">去 Ave.ai</a>
+            </div>
+          </div>
+          <div class="hero-logo-panel" aria-label="Ave.ai 品牌标识">
+            <div class="hero-logo-card">
+              <img src="assets/ave-logo.png" alt="Ave.ai logo">
+            </div>
+            <p>Ave.ai 端午活动页，测出你的链上品粽人格。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-quiz" class="screen" aria-labelledby="quiz-title">
+        <div class="quiz-panel">
+          <div class="quiz-head">
+            <div class="step-line">
+              <span>端午人格测试</span>
+              <span id="answeredCount">0 / 8</span>
+            </div>
+            <div class="progress" aria-label="答题进度"><span id="progressBar"></span></div>
+            <h2 id="quiz-title">选择最像你的答案</h2>
+          </div>
+          <div class="question-list" id="questionList"></div>
+          <div class="submit-row">
+            <p class="status-text" id="quizStatus">答完 8 题后生成你的品粽人格卡片。</p>
+            <div class="button-row">
+              <button class="btn secondary" type="button" id="resetQuizBtn">重置答案</button>
+              <button class="btn primary" type="button" id="submitBtn">提交生成卡片</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-result" class="screen" aria-labelledby="resultTitle">
+        <div class="result-panel">
+          <div class="result-layout">
+            <article class="result-card" id="shareCard">
+              <div class="result-visual" id="resultVisual">
+                <img id="resultImage" src="" alt="">
+                <div class="visual-placeholder" id="visualPlaceholder">
+                  <div>
+                    <strong id="placeholderTitle">人格图占位</strong>
+                    <span>把生成图放入对应 assets/zong 文件后自动显示。</span>
+                  </div>
+                </div>
+              </div>
+              <div class="result-name">
+                <span class="code" id="resultCode">TYPE</span>
+                <h2 id="resultTitle">你的品粽人格</h2>
+                <p id="resultTagline"></p>
+              </div>
+              <div class="score-grid" id="scoreGrid"></div>
+            </article>
+
+            <div class="result-copy">
+              <div class="copy-section">
+                <h3>人格解读</h3>
+                <p id="resultDescription"></p>
+              </div>
+              <div class="copy-section">
+                <h3>本粽宜</h3>
+                <div class="pill-row" id="goodAt"></div>
+              </div>
+              <div class="copy-section">
+                <h3>本粽忌</h3>
+                <ul id="watchOut"></ul>
+              </div>
+              <div class="copy-section">
+                <h3>最佳搭子</h3>
+                <p id="bestMatch"></p>
+              </div>
+              <p class="quote" id="resultQuote"></p>
+              <div class="share-box" id="sharePreview"></div>
+              <div class="button-row">
+                <button class="btn primary" type="button" id="shareBtn">转发分享</button>
+                <button class="btn secondary" type="button" id="copyBtn">复制文案</button>
+                <button class="btn secondary" type="button" id="saveBtn">保存结果图</button>
+                <button class="btn secondary" type="button" id="restartBtn">再测一次</button>
+                <a class="btn secondary" href="https://ave.ai/" target="_blank" rel="noopener noreferrer">去 Ave.ai 看机会</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <p class="footnote">本测试仅供端午活动娱乐，不构成投资建议。链上资产波动较大，请自行判断风险。</p>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const AXES = [
+      { id: "ROU", label: "肉粽" },
+      { id: "EGG", label: "蛋黄粽" },
+      { id: "SWEET", label: "甜粽" },
+      { id: "ICE", label: "冰粽" }
+    ];
+
+    const QUESTIONS = [
+      {
+        id: "q1",
+        title: "你最近的生活状态是：",
+        options: [
+          { key: "A", text: "大盘不好关我什么事，和 musk 一起冲向月球", score: { ROU: 2 } },
+          { key: "B", text: "佛了，已进入人间体验模式，旅游、发呆、恋爱脑复发都算", score: { SWEET: 2 } },
+          { key: "C", text: "还剩 200U 在链上，在再冲一次和买电动车送外卖之间反复横跳", score: { ROU: 1, ICE: 1 } }
+        ]
+      },
+      {
+        id: "q2",
+        title: "你认为交易的本质是：",
+        options: [
+          { key: "A", text: "数学问题", score: { EGG: 2 } },
+          { key: "B", text: "信息战，只不过我永远慢半拍", score: { EGG: 1, ROU: 1 } },
+          { key: "C", text: "玄学", score: { SWEET: 2 } }
+        ]
+      },
+      {
+        id: "q3",
+        title: "正在盯盘，对象在屋里突然喊你的名字",
+        options: [
+          { key: "A", text: "TA 一定是发现一个 10x 以上的 CA，快去看看，一起 FOMO", score: { ROU: 2 } },
+          { key: "B", text: "别吵，我在和 K 线进行灵魂对话", score: { EGG: 2 } },
+          { key: "C", text: "幻听了，是市场在召唤我", score: { ICE: 2 } }
+        ]
+      },
+      {
+        id: "q4",
+        title: "Ave 有哪些产品线",
+        options: [
+          { key: "A", text: "打狗", score: { ROU: 1 } },
+          { key: "B", text: "打新", score: { EGG: 1 } },
+          { key: "C", text: "打合约", score: { ICE: 1 } },
+          { key: "D", text: "以上都有", score: { ROU: 1, EGG: 1, ICE: 1 } }
+        ]
+      },
+      {
+        id: "q5",
+        title: "单币 A7 后怎么过",
+        options: [
+          { key: "A", text: "先把老板炒了，以后 1wU 以下都叫试仓，不重仓不配谈自由", score: { ROU: 2 } },
+          { key: "B", text: "先提 100w 买辆车，Thank you Crypto", score: { SWEET: 2 } },
+          { key: "C", text: "淡定，人不要被钱束缚，我帮你承受这种痛苦", score: { ICE: 2 } }
+        ]
+      },
+      {
+        id: "q6",
+        title: "我喜欢吃 ______ 粽子",
+        options: [
+          { key: "A", text: "肯定是甜粽子，蜜枣、豆沙、沾砂糖", score: { SWEET: 2 } },
+          { key: "B", text: "你懂个锤子哦，咸粽子才是人间正道", score: { EGG: 2 } },
+          { key: "C", text: "买了个粽子的 CA，一起建设起来", score: { ROU: 2 } }
+        ]
+      },
+      {
+        id: "q7",
+        title: "突然觉得自己有登感了是在哪个时刻",
+        options: [
+          { key: "A", text: "总想交几个 00 后的朋友", score: { SWEET: 2 } },
+          { key: "B", text: "什么是大开门？", score: { EGG: 2 } },
+          { key: "C", text: "你才有登感，你全家都有登感", score: { ROU: 2 } }
+        ]
+      },
+      {
+        id: "q8",
+        title: "你在走路，萌萌小女孩说你可以回到 5 年前，你会做什么？",
+        options: [
+          { key: "A", text: "摸摸头，走开", score: { ICE: 2 } },
+          { key: "B", text: "装坏叔叔：你喜欢什么颜色的麻袋？", score: { ROU: 2 } },
+          { key: "C", text: "万一真能回到 5 年前呢，抄底 BTC！！！我愿意", score: { EGG: 2 } }
+        ]
+      }
+    ];
+
+    const PERSONAS = {
+      ROU: {
+        code: "ROU / Moon Charge",
+        name: "至尊肉粽",
+        role: "月球冲锋官",
+        image: "assets/zong/rou.png",
+        tagline: "勇敢的人先享受世界。",
+        description: "别人看到机会还在研究，你已经开始问 CA 发我。你的人格关键词是冲锋、开拓、速度和一点点不服输。你相信 alpha 是开拓出来的，机会不会等准备最充分的人，只会奖励敢先开枪的人。",
+        goodAt: ["热门叙事", "新资产发现", "认识新朋友", "快速行动"],
+        watchOut: ["连续熬夜盯盘", "全仓相信群友", "听见最后一班车就上头"],
+        bestMatch: "咸蛋黄粽。一个负责冲，一个负责看数据，组合起来刚好能少摔几次。",
+        quote: "CA 发我，月球我自己去。",
+        shareLine: "CA 发我，月球我自己去。"
+      },
+      EGG: {
+        code: "EGG / Alpha Research",
+        name: "咸蛋黄粽",
+        role: "Alpha 鉴定师",
+        image: "assets/zong/egg.png",
+        tagline: "不打无准备之仗。",
+        description: "别人看 K 线涨了，你会先看背后原因、资金流、叙事周期和合约风险。你的浏览器里永远有一排标签页，越是热闹，越要冷静拆解。你不是不上车，你是要确认这辆车不是纸糊的。",
+        goodAt: ["AI 赛道研究", "美股打新", "长线布局", "写长文分析"],
+        watchOut: ["过度分析耽误上车", "把自己活成行业分析师", "研究到最后忘了下单"],
+        bestMatch: "至尊肉粽。TA 给你速度，你给 TA 风控。",
+        quote: "别催，我还差 17 个标签页没看。",
+        shareLine: "别催，我还差 17 个标签页没看。"
+      },
+      SWEET: {
+        code: "SWEET / Life Mode",
+        name: "甜粽",
+        role: "人间体验家",
+        image: "assets/zong/sweet.png",
+        tagline: "人生不能只有 K 线，赚钱很好，快乐更重要。",
+        description: "别人盯盘 8 小时，你看 8 分钟就去生活。你知道市场一直在，但朋友、旅行、恋爱和好天气不一定每天都有。你适合低频、轻盈、不过度消耗自己的节奏。",
+        goodAt: ["旅游", "恋爱", "聚会", "低频投资"],
+        watchOut: ["半夜看群", "被朋友带单", "酒后交易"],
+        bestMatch: "冰粽。TA 稳住节奏，你保留生活感。",
+        quote: "K 线会过期，快乐也要趁热。",
+        shareLine: "K 线会过期，快乐也要趁热。"
+      },
+      ICE: {
+        code: "ICE / Long View",
+        name: "冰粽",
+        role: "长期观察者",
+        image: "assets/zong/ice.png",
+        tagline: "别人贪婪时我恐惧，别人恐惧时我贪婪。",
+        description: "你不是没有情绪，只是不会把情绪交给市场。你会看信号、等确认、做配置，也能在嘈杂行情里保持沉默。你相信真正的机会不怕晚一点确认，风险控制永远先于爽感。",
+        goodAt: ["定投", "长线持有", "资产配置", "等机会出现"],
+        watchOut: ["追高", "情绪交易", "被 FOMO 带节奏"],
+        bestMatch: "咸蛋黄粽。一个做长期纪律，一个做信息验证。",
+        quote: "我不是不买，我是在等市场自己交代。",
+        shareLine: "我不是不买，我是在等市场自己交代。"
+      }
+    };
+
+    const FALLBACK_PRIORITY = ["ROU", "EGG", "SWEET", "ICE"];
+    const TIE_BREAKERS = [
+      { questionId: "q6", map: { A: "SWEET", B: "EGG", C: "ROU" } },
+      { questionId: "q1", map: { A: "ROU", B: "SWEET", C: "ICE" } },
+      { questionId: "q8", map: { A: "ICE", B: "ROU", C: "EGG" } }
+    ];
+
+    const AVE_URL = "https://ave.ai/";
+    const AVE_HANDLE = "@aveai_info";
+    const ACTIVITY_URL = window.location.href.split("#")[0];
+
+    const state = {
+      answers: {},
+      resultId: null,
+      scores: {}
+    };
+
+    const screens = {
+      home: document.querySelector("#screen-home"),
+      quiz: document.querySelector("#screen-quiz"),
+      result: document.querySelector("#screen-result")
+    };
+
+    const questionList = document.querySelector("#questionList");
+    const progressBar = document.querySelector("#progressBar");
+    const answeredCount = document.querySelector("#answeredCount");
+    const quizStatus = document.querySelector("#quizStatus");
+    const toast = document.querySelector("#toast");
+
+    function showScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderQuestions() {
+      questionList.innerHTML = QUESTIONS.map((question, index) => {
+        const options = question.options.map(option => `
+          <button class="option" type="button" data-question="${question.id}" data-option="${option.key}" aria-pressed="false">
+            <span class="option-key">${option.key}</span>
+            <span>${option.text}</span>
+          </button>
+        `).join("");
+
+        return `
+          <article class="question" id="${question.id}">
+            <h3><span>Q${index + 1}</span>${question.title}</h3>
+            <div class="options">${options}</div>
+          </article>
+        `;
+      }).join("");
+
+      questionList.addEventListener("click", event => {
+        const option = event.target.closest(".option");
+        if (!option) return;
+        selectOption(option.dataset.question, option.dataset.option);
+      });
+    }
+
+    function selectOption(questionId, optionKey) {
+      state.answers[questionId] = optionKey;
+      document.querySelectorAll(`[data-question="${questionId}"]`).forEach(node => {
+        const isSelected = node.dataset.option === optionKey;
+        node.classList.toggle("selected", isSelected);
+        node.setAttribute("aria-pressed", String(isSelected));
+      });
+      updateProgress();
+    }
+
+    function resetQuiz() {
+      state.answers = {};
+      state.resultId = null;
+      state.scores = {};
+      document.querySelectorAll(".option").forEach(node => {
+        node.classList.remove("selected");
+        node.setAttribute("aria-pressed", "false");
+      });
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const answered = Object.keys(state.answers).length;
+      const total = QUESTIONS.length;
+      const percent = Math.round((answered / total) * 100);
+      answeredCount.textContent = `${answered} / ${total}`;
+      progressBar.style.width = `${percent}%`;
+      quizStatus.textContent = answered === total
+        ? "已答完，可以生成你的品粽人格卡片。"
+        : `还差 ${total - answered} 题。`;
+    }
+
+    function calculateScores() {
+      const scores = Object.fromEntries(AXES.map(axis => [axis.id, 0]));
+      QUESTIONS.forEach(question => {
+        const answerKey = state.answers[question.id];
+        const option = question.options.find(item => item.key === answerKey);
+        if (!option) return;
+        Object.entries(option.score).forEach(([axis, value]) => {
+          scores[axis] += value;
+        });
+      });
+      return scores;
+    }
+
+    function resolveResult(scores) {
+      const highScore = Math.max(...Object.values(scores));
+      const tied = AXES.map(axis => axis.id).filter(axis => scores[axis] === highScore);
+      if (tied.length === 1) return tied[0];
+
+      for (const rule of TIE_BREAKERS) {
+        const answer = state.answers[rule.questionId];
+        const axis = rule.map[answer];
+        if (axis && tied.includes(axis)) return axis;
+      }
+
+      return FALLBACK_PRIORITY.find(axis => tied.includes(axis)) || FALLBACK_PRIORITY[0];
+    }
+
+    function submitQuiz() {
+      const unanswered = QUESTIONS.filter(question => !state.answers[question.id]);
+      if (unanswered.length) {
+        const first = document.querySelector(`#${unanswered[0].id}`);
+        first?.scrollIntoView({ behavior: "smooth", block: "center" });
+        showToast(`还差 ${unanswered.length} 题，答完再生成卡片。`);
+        return;
+      }
+
+      state.scores = calculateScores();
+      state.resultId = resolveResult(state.scores);
+      renderResult();
+      showScreen("result");
+    }
+
+    function renderResult() {
+      const persona = PERSONAS[state.resultId];
+      document.querySelector("#resultCode").textContent = persona.code;
+      document.querySelector("#resultTitle").textContent = `${persona.name} · ${persona.role}`;
+      document.querySelector("#resultTagline").textContent = persona.tagline;
+      document.querySelector("#resultDescription").textContent = persona.description;
+      document.querySelector("#resultQuote").textContent = persona.quote;
+      document.querySelector("#bestMatch").textContent = persona.bestMatch;
+      document.querySelector("#placeholderTitle").textContent = persona.name;
+
+      const image = document.querySelector("#resultImage");
+      const placeholder = document.querySelector("#visualPlaceholder");
+      image.alt = `${persona.name} ${persona.role} 人格图`;
+      image.style.display = "none";
+      placeholder.style.display = "grid";
+      image.onload = () => {
+        image.style.display = "block";
+        placeholder.style.display = "none";
+      };
+      image.onerror = () => {
+        image.style.display = "none";
+        placeholder.style.display = "grid";
+      };
+      image.src = `${persona.image}?v=${Date.now()}`;
+
+      document.querySelector("#scoreGrid").innerHTML = AXES.map(axis => `
+        <div class="score-item">
+          ${axis.label}
+          <strong>${state.scores[axis.id] || 0}</strong>
+        </div>
+      `).join("");
+
+      document.querySelector("#goodAt").innerHTML = persona.goodAt
+        .map(item => `<span class="pill">${item}</span>`)
+        .join("");
+
+      document.querySelector("#watchOut").innerHTML = persona.watchOut
+        .map(item => `<li>${item}</li>`)
+        .join("");
+
+      document.querySelector("#sharePreview").textContent = buildShareText();
+    }
+
+    function buildShareText() {
+      const persona = PERSONAS[state.resultId];
+      return [
+        `我测出来是「${persona.name} · ${persona.role}」。`,
+        persona.shareLine,
+        "",
+        `来测测你是什么品粽：${ACTIVITY_URL}`,
+        `顺手用 Ave.ai 看链上机会：${AVE_URL}`,
+        "",
+        `关注 ${AVE_HANDLE}，晒出你的粽型人格参与端午抽奖。`,
+        "#端午节 #AveAI #Web3"
+      ].join("\n");
+    }
+
+    async function copyShareText() {
+      const text = buildShareText();
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand("copy");
+      textarea.remove();
+      if (copied) {
+        showToast("分享文案已复制。");
+        return true;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast("分享文案已复制。");
+          return true;
+        } catch (error) {
+          // Clipboard writes can be blocked by browser permissions.
+        }
+      }
+
+      showToast("复制失败，请手动选择文案。");
+      return false;
+    }
+
+    async function shareResult() {
+      const text = buildShareText();
+      const persona = PERSONAS[state.resultId];
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `你是什么品粽？${persona.name} · ${persona.role}`,
+            text,
+            url: ACTIVITY_URL
+          });
+          return;
+        } catch (error) {
+          if (error.name === "AbortError") return;
+        }
+      }
+
+      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      const opened = window.open(tweetUrl, "_blank", "noopener,noreferrer");
+      if (!opened) {
+        await copyShareText();
+      }
+    }
+
+    function saveResultHint() {
+      showToast("当前版本使用截图保存。图片放入 assets/zong 后，结果卡会自动展示人格图。");
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("visible");
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        toast.classList.remove("visible");
+      }, 2400);
+    }
+
+    document.querySelector("#startBtn").addEventListener("click", () => showScreen("quiz"));
+    document.querySelector("#resetQuizBtn").addEventListener("click", resetQuiz);
+    document.querySelector("#submitBtn").addEventListener("click", submitQuiz);
+    document.querySelector("#shareBtn").addEventListener("click", shareResult);
+    document.querySelector("#copyBtn").addEventListener("click", copyShareText);
+    document.querySelector("#saveBtn").addEventListener("click", saveResultHint);
+    document.querySelector("#restartBtn").addEventListener("click", () => {
+      resetQuiz();
+      showScreen("quiz");
+    });
+
+    renderQuestions();
+    updateProgress();
+  </script>
+</body>
+</html>

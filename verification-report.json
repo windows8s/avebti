@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-06-18T02:13:04.720Z",
+  "localHtml": {
+    "path": "index.html",
+    "bytes": 39082,
+    "sha256": "bf5ec096a7a7202ea7747b07f8fa86898f01fce25b00cda669c7cf8c56518965",
+    "imageRefs": 0,
+    "externalScriptRefs": 0
+  },
+  "originalDeploymentHtml": {
+    "path": "index.original.html",
+    "bytes": 70143,
+    "sha256": "c9b077b1108134e9966dc0e3f4a05b06d31c07e058879509b6c6f68999dfa01e"
+  },
+  "images": {
+    "refsInLocalHtml": 0,
+    "refsInOriginalHtml": 27,
+    "mirroredFiles": 27,
+    "sourceFiles": 27,
+    "nonEmptyMirroredFiles": 27,
+    "localRefsVsMirror": {
+      "missing": [],
+      "extra": [
+        "ATM-er.png",
+        "BOSS.png",
+        "CTRL.png",
+        "DEAD.png",
+        "DRUNK.png",
+        "Dior-s.jpg",
+        "FAKE.png",
+        "FUCK.png",
+        "GOGO.png",
+        "HHHH.png",
+        "IMFW.png",
+        "IMSB.png",
+        "JOKE-R.jpg",
+        "LOVE-R.png",
+        "MALO.png",
+        "MONK.png",
+        "MUM.png",
+        "OH-NO.png",
+        "OJBK.png",
+        "POOR.png",
+        "SEXY.png",
+        "SHIT.png",
+        "SOLO.png",
+        "THAN-K.png",
+        "THIN-K.png",
+        "WOC.png",
+        "ZZZZ.png"
+      ]
+    },
+    "mirrorVsSource": {
+      "missing": [],
+      "extra": []
+    },
+    "hashMismatchesWithSource": []
+  },
+  "sourceSnapshot": {
+    "path": "source/SBTI-test",
+    "gitHead": "6c24c9f2a4d3548010af44c9e1322c206f64f73d",
+    "deployedMinusAnalyticsEqualsSource": true
+  },
+  "pass": false
+}

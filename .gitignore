@@ -1,0 +1,7 @@
+.server-*.log
+.server-*.err.log
+.server*.pid
+~$*.docx
+Thumbs.db
+.DS_Store
+
