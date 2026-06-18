@@ -1014,6 +1014,7 @@
     const answeredCount = document.querySelector("#answeredCount");
     const quizStatus = document.querySelector("#quizStatus");
     const toast = document.querySelector("#toast");
+    const personaImagePreloads = new Map();
 
     function showScreen(name) {
       Object.values(screens).forEach(screen => screen.classList.remove("active"));
@@ -1104,7 +1105,7 @@
       return FALLBACK_PRIORITY.find(axis => tied.includes(axis)) || FALLBACK_PRIORITY[0];
     }
 
-    function submitQuiz() {
+    async function submitQuiz() {
       const unanswered = QUESTIONS.filter(question => !state.answers[question.id]);
       if (unanswered.length) {
         const first = document.querySelector(`#${unanswered[0].id}`);
@@ -1115,7 +1116,22 @@
 
       state.scores = calculateScores();
       state.resultId = resolveResult(state.scores);
-      renderResult();
+      const persona = PERSONAS[state.resultId];
+      const button = document.querySelector("#submitBtn");
+      const originalText = button.textContent;
+      button.disabled = true;
+      button.textContent = "生成中...";
+      try {
+        await preloadPersonaImage(persona);
+        renderResult();
+        await waitForResultImageElement(persona);
+      } catch (error) {
+        console.warn(error);
+        renderResult();
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
       showScreen("result");
     }
 
@@ -1132,8 +1148,6 @@
       const image = document.querySelector("#resultImage");
       const placeholder = document.querySelector("#visualPlaceholder");
       image.alt = `${persona.name} ${persona.role} 人格图`;
-      image.style.display = "none";
-      placeholder.style.display = "grid";
       image.onload = () => {
         image.style.display = "block";
         placeholder.style.display = "none";
@@ -1142,7 +1156,14 @@
         image.style.display = "none";
         placeholder.style.display = "grid";
       };
-      image.src = `${getPersonaImagePath(persona)}?v=${Date.now()}`;
+      image.src = getPersonaImagePath(persona);
+      if (image.complete && image.naturalWidth > 0) {
+        image.style.display = "block";
+        placeholder.style.display = "none";
+      } else {
+        image.style.display = "none";
+        placeholder.style.display = "grid";
+      }
 
       document.querySelector("#goodAt").innerHTML = persona.goodAt
         .map(item => `<span class="pill">${item}</span>`)
@@ -1157,6 +1178,92 @@
 
     function getPersonaImagePath(persona) {
       return `${PERSONA_IMAGE_DIR}/${encodeURIComponent(persona.name)}.${PERSONA_IMAGE_EXT}`;
+    }
+
+    function preloadPersonaImage(persona) {
+      const src = getPersonaImagePath(persona);
+      const cached = personaImagePreloads.get(src);
+      if (cached) return cached;
+
+      const preload = new Promise((resolve, reject) => {
+        const image = new Image();
+        image.decoding = "async";
+        image.fetchPriority = "high";
+        image.onload = async () => {
+          if (image.decode) {
+            try {
+              await image.decode();
+            } catch (error) {
+              // The image is already loaded; decode failures should not block display.
+            }
+          }
+          resolve(src);
+        };
+        image.onerror = () => {
+          personaImagePreloads.delete(src);
+          reject(new Error(`Result image failed to preload: ${src}`));
+        };
+        image.src = src;
+      });
+
+      personaImagePreloads.set(src, preload);
+      return preload;
+    }
+
+    function decodeLoadedImage(image) {
+      if (!image.decode) return Promise.resolve();
+      return image.decode().catch(() => undefined);
+    }
+
+    function waitForResultImageElement(persona) {
+      const image = document.querySelector("#resultImage");
+      const src = getPersonaImagePath(persona);
+      if (image.getAttribute("src") !== src) image.src = src;
+
+      return new Promise((resolve, reject) => {
+        let settled = false;
+        const cleanup = () => {
+          image.removeEventListener("load", handleLoad);
+          image.removeEventListener("error", handleError);
+        };
+        const finish = async () => {
+          if (settled) return;
+          settled = true;
+          cleanup();
+          await decodeLoadedImage(image);
+          resolve();
+        };
+        const handleLoad = () => {
+          if (image.naturalWidth > 0) {
+            finish();
+          } else {
+            handleError();
+          }
+        };
+        const handleError = () => {
+          if (settled) return;
+          settled = true;
+          cleanup();
+          reject(new Error(`Result image failed to render: ${src}`));
+        };
+
+        image.addEventListener("load", handleLoad);
+        image.addEventListener("error", handleError);
+
+        if (image.complete) {
+          if (image.naturalWidth > 0) {
+            finish();
+          } else {
+            handleError();
+          }
+        }
+      });
+    }
+
+    function warmPersonaImages() {
+      Object.values(PERSONAS).forEach(persona => {
+        preloadPersonaImage(persona).catch(error => console.warn(error));
+      });
     }
 
     function buildShareText() {
@@ -1556,7 +1663,10 @@
       }, 2400);
     }
 
-    document.querySelector("#startBtn").addEventListener("click", () => showScreen("quiz"));
+    document.querySelector("#startBtn").addEventListener("click", () => {
+      warmPersonaImages();
+      showScreen("quiz");
+    });
     document.querySelector("#resetQuizBtn").addEventListener("click", resetQuiz);
     document.querySelector("#submitBtn").addEventListener("click", submitQuiz);
     document.querySelector("#shareBtn").addEventListener("click", shareResult);
@@ -1568,6 +1678,7 @@
     });
 
     renderQuestions();
+    warmPersonaImages();
     updateProgress();
   </script>
 </body>
