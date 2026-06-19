@@ -4,6 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#050509">
+  <meta name="description" content="Ave.ai 端午链上人格测试，测出你的品粽人格并生成结果长图。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="你是什么品粽？Ave.ai 端午人格测试">
+  <meta property="og:description" content="测出你的链上品粽人格，生成专属结果长图。">
+  <meta property="og:url" content="https://avebti.xyz/">
+  <meta property="og:site_name" content="Ave.ai">
+  <link rel="canonical" href="https://avebti.xyz/">
   <title>你是什么品粽？Ave.ai 端午人格测试</title>
   <style>
     :root {
@@ -993,7 +1000,7 @@
 
     const AVE_URL = "https://ave.ai/";
     const AVE_HANDLE = "@aveai_info";
-    const ACTIVITY_URL = "https://windows8s.github.io/avebti/";
+    const ACTIVITY_URL = getActivityUrl();
     const POSTER_WIDTH = 750;
     const POSTER_SCALE = 2;
 
@@ -1015,6 +1022,16 @@
     const quizStatus = document.querySelector("#quizStatus");
     const toast = document.querySelector("#toast");
     const personaImagePreloads = new Map();
+
+    function getActivityUrl() {
+      if (!window.location.origin || window.location.origin === "null") {
+        return "https://avebti.xyz/";
+      }
+      const path = window.location.pathname.endsWith("/")
+        ? window.location.pathname
+        : window.location.pathname.replace(/[^/]*$/, "");
+      return new URL(path || "/", window.location.origin).href;
+    }
 
     function showScreen(name) {
       Object.values(screens).forEach(screen => screen.classList.remove("active"));
